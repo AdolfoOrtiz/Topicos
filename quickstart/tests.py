@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from rest_framework import status
+from quickstart.models import Card
 
 class MeEndpointTestCase(TestCase):
     def setUp(self):
@@ -183,4 +184,34 @@ class LogoutTestCase(TestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token.key}')
         response = self.client.post('/api/logout/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CardViewSetTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='carduser',
+            email='carduser@example.com',
+            password='Password123!'
+        )
+        self.token = Token.objects.create(user=self.user)
+        self.client = APIClient()
+
+    def test_unauthenticated_card_access_fails(self):
+        response = self.client.get('/cards/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_and_list_cards(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token.key}')
+        # Crear carta
+        response = self.client.post('/cards/', {
+            'nombre': 'Dragón Blanco',
+            'descripcion': 'Monstruo legendario de ojos azules.'
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['nombre'], 'Dragón Blanco')
+
+        # Listar cartas
+        response_list = self.client.get('/cards/')
+        self.assertEqual(response_list.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_list.data['count'], 1)
 

@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from quickstart.views import (
     UserViewSet, GroupViewSet,
     CarreraViewSet, MateriaViewSet,
-    AlumnoViewSet, InscripcionViewSet
+    AlumnoViewSet, InscripcionViewSet, CardViewSet
 )
 
 router = routers.DefaultRouter()
@@ -17,6 +17,8 @@ router.register(r'carreras', CarreraViewSet)
 router.register(r'materias', MateriaViewSet)
 router.register(r'alumnos', AlumnoViewSet)
 router.register(r'inscripciones', InscripcionViewSet)
+router.register(r'cards', CardViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),

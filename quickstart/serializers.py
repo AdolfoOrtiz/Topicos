@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
-from .models import Carrera, Materia, Alumno, Inscripcion, Publicacion
+from .models import Carrera, Materia, Alumno, Inscripcion, Publicacion, Card
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
 
@@ -73,6 +73,12 @@ class AlumnoSerializer(serializers.ModelSerializer):
 class InscripcionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inscripcion
+        fields = '__all__'
+
+
+class CardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Card
         fields = '__all__'
 
 class RegisterSerializer(serializers.ModelSerializer):

@@ -13,10 +13,11 @@ from quickstart.authentication import BearerTokenAuthentication
 from quickstart.serializers import (
     GroupSerializer, UserSerializer,
     CarreraSerializer, MateriaSerializer,
-    AlumnoSerializer, InscripcionSerializer, RegisterSerializer,
+    AlumnoSerializer, InscripcionSerializer, CardSerializer, RegisterSerializer,
     MeUserSerializer, MeUserUpdateSerializer
 )
-from quickstart.models import Carrera, Materia, Alumno, Inscripcion
+from quickstart.models import Carrera, Materia, Alumno, Inscripcion, Card
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -65,6 +66,19 @@ class InscripcionViewSet(viewsets.ModelViewSet):
     queryset = Inscripcion.objects.all()
     serializer_class = InscripcionSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class CardViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint para listar, crear, ver, actualizar y eliminar cartas (Card).
+    """
+    queryset = Card.objects.all().order_by('id')
+    serializer_class = CardSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['nombre', 'descripcion']
+    ordering_fields = ['id', 'nombre']
+
 
 
 class CustomAuthToken(ObtainAuthToken):

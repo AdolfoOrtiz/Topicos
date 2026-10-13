@@ -74,3 +74,16 @@ class Publicacion(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+class Card(models.Model):
+    nombre = models.CharField(max_length=150, verbose_name="Nombre de la carta")
+    imagen = models.ImageField(upload_to='cards/', blank=True, null=True, verbose_name="Imagen")
+    descripcion = models.TextField(verbose_name="Descripción")
+
+    class Meta:
+        verbose_name = "Card"
+        verbose_name_plural = "Cards"
+
+    def __str__(self):
+        return self.nombre
